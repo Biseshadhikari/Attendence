@@ -1,0 +1,19 @@
+<!-- create_student.html -->
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  input[type="text"]{ 
+    background-color: yellow;
+  }
+</style>
+  <div class="container mx-auto mt-8">
+    <h1 class="text-2xl font-bold mb-4 text-center">Create Student</h1>
+    <hr>
+
+    <form method="post" action="{% url 'create_student' %}" class="max-w-md mt-5 p-3 mx-auto" novalidate>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Create Student</button>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{%load static%}
+{% block content %}
+
+<div class="flex items-center justify-center -mt-10 min-h-screen">
+    <div class="bg-white p-8 rounded shadow-md md:w-96 w-full">
+        <div class="text-center mb-8">
+        </div>
+        <img src="{%static 'img/logo.png'%}" class = "mb-10 mx-10" style=" width: 200px;" alt="">
+        <h2 class="text-2xl font-semibold mb-4">Login</h2>
+
+        {% if messages %}
+        <div id="messages-container" class="p-4 text-center">
+          {% for msg in messages %}
+            <div class="bg-red-500 text-white p-2 rounded-md mb-4">
+              <span>{{ msg.message }}</span>
+              <button onclick="closeMessage(this)" class="ml-2 text-white">x</button>
+            </div>
+          {% endfor %}
+        </div>
+      
+        <script>
+          function closeMessage(button) {
+            var messageContainer = button.parentElement;
+            messageContainer.style.display = 'none';
+          }
+      
+          // Automatically hide messages after 3 seconds
+          setTimeout(function () {
+            var messagesContainer = document.getElementById('messages-container');
+            if (messagesContainer) {
+              messagesContainer.style.display = 'none';
+            }
+          }, 5000);
+        </script>
+      {% endif %}
+
+        <form action="" method="post" novalidate>
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-medium text-gray-600">Username</label>
+                <input type="text" id="username" name="username" class="mt-1 p-2 w-full border rounded-md">
+            </div>
+
+            <div class="mb-6">
+                <label for="password" class="block text-sm font-medium text-gray-600">Password</label>
+                <input type="password" id="password" name="password" class="mt-1 p-2 w-full border rounded-md">
+            </div>
+
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md w-full md:w-auto">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

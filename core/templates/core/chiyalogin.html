@@ -1,0 +1,68 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <title>Login Page</title>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <nav class="flex flex-col items-center p-4 bg-gray-900 border-b-2 border-gray-700">
+        
+        <!-- Hamburger Menu for smaller screens -->
+        
+
+        <div class="flex items-center space-x-4">
+            <!-- Social Icons -->
+            <a href="#" target="_blank" class="text-xl"><i class="fab fa-facebook"></i></a>
+            <a href="#" target="_blank" class="text-xl"><i class="fab fa-twitter"></i></a>
+            <a href="#" target="_blank" class="text-xl"><i class="fab fa-instagram"></i></a>
+        </div>
+
+        <!-- Logo -->
+        <img src="{%static 'img/logo2.png'%}" alt="Logo" style="width: 150px" class="max-w-1/4 my-4">
+
+        <!-- Text below logo -->
+        <p class="text-lg text-center">Unveiling The Tales Of Nepali Entrepreneurs, One Story At A Time.</p>
+
+        <div class="flex items-center space-x-4 mt-4">
+            <!-- More Social Icons -->
+            <button id="menu" class="block    text-white focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>     
+            <button id="close" class="block  hidden text-white focus:outline-none">
+                <i class="fas  fa-times text-2xl"></i>
+            </button>   
+        </div>
+        
+    </nav>
+
+    <div class="flex justify-center items-center  " >
+
+        <div class="bg-gray-800 p-8 rounded-lg shadow-md w-full md:w-96">
+
+            <h2 class="text-2xl font-semibold mb-6">Login</h2>
+
+            <form action="#" method="POST">
+
+                <div class="mb-4">
+                    <label for="username" class="block text-sm font-medium">Username</label>
+                    <input type="text" id="username" name="username" class="w-full px-4 py-2 mt-2 rounded-md bg-gray-700 focus:outline-none focus:ring focus:border-blue-300" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium">Password</label>
+                    <input type="password" id="password" name="password" class="w-full px-4 py-2 mt-2 rounded-md bg-gray-700 focus:outline-none focus:ring focus:border-blue-300" required>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">Login</button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

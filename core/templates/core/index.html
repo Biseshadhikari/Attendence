@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% load lock %}
+{% block content %}
+<div class="container mx-auto mt-8">
+    {% if messages %}
+    <div id="messages-container" class=" p-4 text-center">
+      {% for msg in messages %}
+        <div class="bg-red-500 text-white p-2 rounded-md mb-4">{{ msg.message }}</div>
+      {% endfor %}
+    </div>
+  
+    <script>
+      setTimeout(function () {
+        document.getElementById('messages-container').style.display = 'none';
+      }, 3000);
+    </script>
+  {% endif %}
+    <button
+        id="takeAttendanceButton"
+        class="bg-green-500 text-white py-2 mx-3 px-4 rounded-md mb-4 "
+        onclick="handleAttendanceButtonClick()"
+    >
+        
+            Take Attendance
+    
+    </button>
+
+    <!-- Filter Attendance Button -->
+    
+    <!-- Attendance Table -->
+    {%if datas%}
+    <div class="container w-full h-auto mb-3">
+        <form id="filterForm" action="/" class="flex sm:flex-row flex-col justify-center gap-3 items-center" method="get">
+            <div class="flex gap-1 flex-col items-center">
+                <label for="startdate" class="font-bold">From</label>
+                <input type="date" id="startdate" class="p-2 px-5 bg-gray-200 border-1 rounded-xl border-gray-300" name="from" value="{{ request.GET.from }}">
+            </div>
+            <div class="flex gap-1 flex-col items-center">
+                <label for="enddate" class="font-bold">To</label>
+                <input type="date" id="enddate" class="p-2 px-5 bg-gray-200 border-1 rounded-xl border-gray-300" name="to" value="{{ request.GET.to }}">
+            </div>
+            {%if request.user.is_superuser%}
+            <div class="flex gap-1 flex-col items-center">
+                <label for="searchUser" class="font-bold">Search User</label>
+
+                <input type="text" id="searchUser" placeholder="Search Student" class="p-2 px-5 bg-gray-200 border-1 rounded-xl border-gray-300" name="user" value="{{ request.GET.user }}">
+            </div>
+            {%endif%}
+
+            <button class="bg-indigo-500 mt-4 p-2 pl-5 rounded-lg hover:bg-indigo-700 text-white">Filter Notice</button>
+
+        </form>
+    </div>
+    
+    
+    <div class="overflow-x-auto">
+        {%if request.user.is_superuser%}
+        
+        <table class="min-w-full bg-white border border-gray-300 rounded-lg">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b">Name</th>
+                    <th class="py-2 px-4 border-b">Date</th>
+                    <th class="py-2 px-4 border-b">Entry</th>
+                    <th class="py-2 px-4 border-b">Exit</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {%for data in datas%}
+                <tr>
+                    <th class="py-2 px-4 border-b text-center">{{data.employee.username}}</th>
+                    <td class="py-2 px-4 border-b text-center">{{data.entry|slice:10}}</td>
+                    <td class="py-2 px-4 border-b text-center">{{data.entry|slice:"10:19"}}</td>
+                    <td class="py-2 px-4 border-b text-center">{{data.leave|slice:"10:19"}}</td>
+                </tr>
+                {%endfor%}
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+        {%else%}
+        <table class="min-w-full bg-white border border-gray-300 rounded-lg">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b">Date</th>
+                    <th class="py-2 px-4 border-b">Entry</th>
+                    <th class="py-2 px-4 border-b">Exit</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {%for data in datas%}
+                <tr>
+                    <td class="py-2 px-4 border-b text-center">{{data.entry|slice:10}}</td>
+                    <td class="py-2 px-4 border-b text-center">{{data.entry|slice:"10:19"}}</td>
+                    <td class="py-2 px-4 border-b text-center">{{data.leave|slice:"10:19"}}</td>
+                </tr>
+                {%endfor%}
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+        {%endif%}
+    </div>
+    {%else%}
+    <div class="w-full p-5 rounded-md shadow-xl bg-white">
+        <h1 class="font-bold text-xl text-red-500 text-center">No Data Available</h1>
+    </div>
+    {%endif%}
+
+    <!-- Responsive Pagination -->
+    <!-- Responsive Pagination -->
+<div class="pagination flex justify-center items-center mt-8">
+    <ul class="flex list-reset border rounded-md">
+        {% if datas.paginator.num_pages > 1 %}
+        <div class="pagination flex justify-center items-center mt-8">
+            <ul class="flex list-reset border rounded-md">
+                {% if datas.has_previous %}
+                    <li class="mr-2">
+                        <a href="?page=1" class="block px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:bg-gray-300">&laquo; first</a>
+                    </li>
+                    <li class="mr-2">
+                        <a href="?page={{ datas.previous_page_number }}" class="block px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:bg-gray-300">previous</a>
+                    </li>
+                {% endif %}
+    
+                <li class="mr-2">
+                    <span class="block px-3 py-2 bg-blue-500 text-white rounded-md">{{ datas.number }}</span>
+                </li>
+    
+                {% if datas.has_next %}
+                    <li class="mr-2">
+                        <a href="?page={{ datas.next_page_number }}" class="block px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:bg-gray-300">next</a>
+                    </li>
+                    <li class="mr-2">
+                        <a href="?page={{ datas.paginator.num_pages }}" class="block px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:bg-gray-300">last &raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+    </ul>
+</div>
+
+
+    <!-- Modal for Attendance Entry/Exit -->
+    <div id="attendanceModal" class="fixed inset-0 bg-white bg-opacity-75 z-50 hidden backdrop-filter backdrop-blur-lg flex justify-center items-center">
+        <div class="bg-gray-100 rounded-lg shadow-lg p-8">
+            <button id="modalCloseButton" class="absolute top-2 right-2 text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <h2 class="text-2xl font-semibold mb-4">Take Attendance</h2>
+            <form class="flex justify-between" method = "post">
+                {%csrf_token%}
+                <input type="hidden" name="user_latitude" id="user_latitude" value="">
+                <input type="hidden" name="user_longitude" id="user_longitude" value="">
+                <button
+                id="takeAttendanceButton"
+                class="bg-green-500 text-white py-2 mx-3 px-4 rounded-md mb-4 {% if todays_current_data|display_entry_button:request.user == False %}bg-opacity-75 cursor-not-allowed{% endif %}"
+                onclick="handleAttendanceButtonClick()"
+                name = "btn"
+                value = "Entry"
+                {% if todays_current_data|display_entry_button:request.user == False %}disabled{% endif %}
+            >   
+                {% if todays_current_data|display_entry_button:request.user == False %}
+                    Entry🔒
+                {% else %}
+                    Entry
+                {% endif %}
+            </button>
+            <button
+            id="takeAttendanceButton"
+            class="bg-red-500 text-white py-2 mx-3 px-4 rounded-md mb-4 {% if todays_current_data|display_exit_button:request.user == False %}bg-opacity-75 cursor-not-allowed{% endif %}"
+            onclick="handleAttendanceButtonClick()"
+            name = "btn"
+            value = "Exit"
+            {% if todays_current_data|display_exit_button:request.user == False %}disabled{% endif %}
+        >   
+            {% if todays_current_data|display_exit_button:request.user == False %}
+                Exit🔒
+            {% else %}
+                Exit
+            {% endif %}
+        </button>            </form>
+            <!-- Close Modal Button Inside Card -->
+        </div>
+    </div>
+</div>
+
+
+
+
+{%endblock content%}

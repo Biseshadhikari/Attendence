@@ -1,0 +1,16 @@
+<!-- create_course.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto mt-8">
+  <h2 class="text-3xl font-bold mb-6 text-center">Create Course</h2>
+  <form method="post" action="{% url 'create_course' %}" class="max-w-md mx-auto bg-white p-8 rounded shadow-md">
+    {% csrf_token %}
+    <div class="mb-4">
+      {{ form.title.label_tag }}
+      {{ form.title }}
+    </div>
+    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>News Detail Page</title>
+</head>
+
+<body class="bg-gray-900 text-white font-sans">
+    <nav class="flex flex-col items-center p-4 bg-gray-900 border-b-2 border-gray-700">
+        
+        <!-- Hamburger Menu for smaller screens -->
+        
+
+        <div class="flex items-center space-x-4">
+            <!-- Social Icons -->
+            <a href="#" target="_blank" class="text-xl"><i class="fab fa-facebook"></i></a>
+            <a href="#" target="_blank" class="text-xl"><i class="fab fa-twitter"></i></a>
+            <a href="#" target="_blank" class="text-xl"><i class="fab fa-instagram"></i></a>
+        </div>
+
+        <!-- Logo -->
+        <img src="{%static 'img/logo2.png'%}" alt="Logo" style="width: 150px" class="max-w-1/4 my-4">
+
+        <!-- Text below logo -->
+        <p class="text-lg text-center">Unveiling The Tales Of Nepali Entrepreneurs, One Story At A Time.</p>
+
+        <div class="flex items-center space-x-4 mt-4">
+            <!-- More Social Icons -->
+            <button id="menu" class="block    text-white focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>     
+            <button id="close" class="block  hidden text-white focus:outline-none">
+                <i class="fas  fa-times text-2xl"></i>
+            </button>   
+        </div>
+        
+    </nav>
+
+    <!-- News Detail Section -->
+    <section class="container mx-auto mt-12 p-4 lg:flex lg:items-start">
+
+        <!-- Main Content -->
+        <div class="lg:w-3/4 lg:pr-8">
+            <h1 class="text-4xl font-bold mb-4">News Title</h1>
+            <p class="text-gray-500 mb-6">Published on <span class="font-semibold">13.01.2022</span> by <span
+                    class="text-yellow-500">John Doe</span></p>
+            <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/024.webp" alt="News Thumbnail"
+                class="w-full max-h-96 object-cover mb-6 rounded-lg">
+
+            <p class="mb-6 leading-7">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet mi eget
+                urna placerat vulputate. Ut vulputate est non quam dignissim elementum. Donec a ullamcorper
+                diam.</p>
+
+            <!-- Nested Comment Section -->
+            <div class="comment-section mb-8">
+                <h2 class="text-2xl font-bold mb-4">Comments</h2>
+
+                <!-- Comment 1 -->
+                <div class="comment bg-gray-800 p-4 rounded-lg mb-4">
+                    <p class="mb-2"><span class="font-semibold text-yellow-500">John Doe:</span> Lorem ipsum dolor
+                        sit amet, consectetur adipiscing elit.</p>
+
+                    <!-- Nested Comment 1 -->
+                    <div class="nested-comment pl-4 bg-gray-700 p-3 rounded-lg">
+                        <p class="mb-2"><span class="font-semibold text-yellow-500">Jane Doe:</span> Ut enim ad minim
+                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat.</p>
+                        
+                    </div>
+                    
+                    <!-- End Nested Comment 1 -->
+                </div>
+                <!-- End Comment 1 -->
+
+                <!-- Comment 2 -->
+                <div class="comment bg-gray-800 p-4 rounded-lg mb-4">
+                    <p class="mb-2"><span class="font-semibold text-yellow-500">Alice Smith:</span> Duis aute irure
+                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                </div>
+                <!-- End Comment 2 -->
+
+                <!-- Add more comments as needed -->
+
+                <!-- Add Comment Form -->
+                <div class="comment-form mt-6">
+                    <h3 class="text-xl font-semibold mb-4">Leave a Comment</h3>
+
+                    <!-- Modern Comment Input Field -->
+                    <div class="mb-4">
+                        <label for="comment" class="block text-sm font-medium text-gray-500">Your Comment</label>
+                        <textarea id="comment" name="comment" rows="4"
+                            class="mt-1 p-2 block w-full border border-gray-300 rounded-md bg-gray-800 focus:outline-none focus:border-yellow-500 text-white"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit"
+                        class="bg-yellow-500 text-gray-900 py-2 px-4 rounded-md hover:bg-yellow-400 focus:outline-none focus:border-yellow-700 focus:ring focus:ring-yellow-200">
+                        Post Comment
+                    </button>
+                </div>
+            </div>
+            <!-- End Comment Section -->
+        </div>
+
+        <!-- Related News Sidebar -->
+        <aside class="lg:w-1/4 bg-gray-800 mt-5 md:mt-20 p-4 rounded-lg" style = "margin-top: 100px;">
+            <h2 class="text-xl font-bold mb-4">Related News</h2>
+
+            <!-- Related News 1 -->
+            <div class="related-news mb-4 flex">
+                <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/081.webp" alt="Related News Thumbnail"
+                    class="w-1/3 max-h-32 object-cover mb-2 rounded-lg mr-4">
+                <div class="w-2/3">
+                    <h3 class="text-lg font-semibold">Related News Title 1</h3>
+                </div>
+            </div>
+            <!-- End Related News 1 -->
+
+            <!-- Related News 2 -->
+            <div class="related-news mb-4 flex">
+                <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/024.webp" alt="Related News Thumbnail"
+                    class="w-1/3 max-h-32 object-cover mb-2 rounded-lg mr-4">
+                <div class="w-2/3">
+                    <h3 class="text-lg font-semibold">Related News Title 2</h3>
+                </div>
+            </div>
+            <!-- End Related News 2 -->
+
+            <!-- Add more related news as needed -->
+        </aside>
+
+    </section>
+
+</body>
+
+</html>
