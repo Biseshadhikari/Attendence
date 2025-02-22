@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-AUTH_USER_MODEL = "core.User" 
+AUTH_USER_MODEL = 'core.User'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -50,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.FirstTimePasswordChangeMiddleware',
+
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -121,10 +123,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
 
-]
 STATIC_ROOT ='/static/'
 
 

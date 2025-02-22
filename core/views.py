@@ -1,48 +1,36 @@
-from django.shortcuts import render
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 import time
 from django.db.models import Q
-from .forms import *
-from .models import *
 from django.contrib import messages
 from django.utils import timezone
-from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-# Create your views here.
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
-from .models import User
+from .forms import *
+from django.contrib.auth import get_user_model
+User = get_user_model()  # This ensures you are using 'core.User'
 
 def signin(request):
-    if not request.user.is_authenticated:
-
-        if request.method == 'POST':
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-
-            user_obj = User.objects.filter(username=username).first()
-            if user_obj is None:
-                messages.success(request, 'User not found! Please sign in with the correct username.')
-                return redirect('/login')
-
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-
-                # Check if 'redirect' parameter exists in GET request, else redirect to home
-                redirect_url = request.GET.get('redirect', '/')  # Defaults to 'home' if no redirect is specified
-                return redirect(redirect_url)
-            else:
-                messages.success(request, 'Wrong password.')
-                return redirect('/login')
-
-        return render(request, 'core/login.html')
-    else:
+    if request.user.is_authenticated:
         return redirect('/')
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            redirect_url = request.GET.get('redirect', '/')  # Redirect to home or specified page
+            return redirect(redirect_url)
+        else:
+            messages.error(request, 'Invalid username or password.')
+            return redirect('/login')
+
+    return render(request, 'core/login.html')
+
 
     
 
@@ -301,3 +289,36 @@ def scan_qr(request):
     return redirect('home')  # Redirect to homepage
 
 
+
+# views.py
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+def custom_password_change(request):
+    if request.method == 'POST':
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # Check if the passwords match
+        if new_password != confirm_password:
+            messages.error(request, 'New passwords do not match.')
+            return redirect('password_change')
+
+        # Set the new password
+        user = request.user
+        user.set_password(new_password)
+        user.save()
+
+        # Update session to avoid user getting logged out
+        from django.contrib.auth import update_session_auth_hash
+        update_session_auth_hash(request, user)
+
+        # Update profile to reflect password change
+        user.profile.password_changed = True
+        user.profile.save()
+
+        messages.success(request, 'Your password has been updated successfully.')
+        return redirect('/')  # Redirect to home or desired page
+
+    return render(request, 'core/password_change.html')
