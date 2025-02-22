@@ -12,31 +12,38 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from .models import User
+
 def signin(request):
     if not request.user.is_authenticated:
 
-        if request.method =='POST':
+        if request.method == 'POST':
             username = request.POST.get('username')
             password = request.POST.get('password')
-            print(username,password)
-            user_obj = User.objects.filter(username = username).first()
-            if  user_obj is None:
-                messages.success(request,'User not found!!! please signin with correct username')
+
+            user_obj = User.objects.filter(username=username).first()
+            if user_obj is None:
+                messages.success(request, 'User not found! Please sign in with the correct username.')
                 return redirect('/login')
-            
-            user = authenticate(request,username = username,password= password)
+
+            user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')
-            else:
-                messages.success(request,'Wrong password')
-                return redirect('/login')
-            return redirect('/')
-            
 
-        return render(request,'core/login.html')
+                # Check if 'redirect' parameter exists in GET request, else redirect to home
+                redirect_url = request.GET.get('redirect', '/')  # Defaults to 'home' if no redirect is specified
+                return redirect(redirect_url)
+            else:
+                messages.success(request, 'Wrong password.')
+                return redirect('/login')
+
+        return render(request, 'core/login.html')
     else:
         return redirect('/')
+
     
 
 
@@ -244,3 +251,53 @@ def change_password(request):
 
 def chiya(request): 
     return render(request,'core/chiya.html')
+
+
+
+import qrcode
+from io import BytesIO
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Attendance
+
+def generate_qr(request):
+    """Generate QR dynamically with the current domain."""
+    current_domain = request.get_host()  # Get the current domain dynamically
+    qr_url = f"http://{current_domain}/scan/"  # Generate URL dynamically
+    
+    qr = qrcode.make(qr_url)
+
+    buffer = BytesIO()
+    qr.save(buffer, format="PNG")
+    buffer.seek(0)
+
+    return HttpResponse(buffer.getvalue(), content_type="image/png")
+
+@login_required(login_url='/login/?redirect=/scan')
+def scan_qr(request):
+    """Handle QR scan and mark attendance."""
+    user = request.user
+    current_date = timezone.localtime(timezone.now()).date()
+
+    attended_today = Attendance.objects.filter(employee=user, entry__startswith=str(current_date))
+
+    if attended_today.exists():
+        attendance = attended_today.first()
+
+        if attendance.leave:
+            messages.warning(request, "Your exit has already been recorded today.")
+        else:
+            attendance.leave = timezone.localtime(timezone.now())
+            attendance.save()
+            messages.success(request, "Exit recorded successfully.")
+    else:
+        entry_time = timezone.localtime(timezone.now())
+        Attendance.objects.create(employee=user, entry=entry_time)
+        messages.success(request, "Entry recorded successfully.")
+
+    return redirect('home')  # Redirect to homepage
+
+

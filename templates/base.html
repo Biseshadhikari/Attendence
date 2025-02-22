@@ -1,112 +1,101 @@
-{%load static%}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pi Innovations</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100">
+    {%load static%}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Pi Innovations</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-gray-100">
 
-    <!-- Navigation Bar -->
-    <nav class="bg-white shadow-md p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <!-- Logo -->
-            <a href="/" class="text-white text-lg font-semibold" style="width: 200px;"><img src="{%static 'img/logo.png'%}" alt=""></a>
+        <!-- Navigation Bar -->
+        <nav class="bg-white shadow-md p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <!-- Logo -->
+                <a href="/" class="text-white text-lg font-semibold" style="width: 200px;"><img src="{%static 'img/logo.png'%}" alt=""></a>
 
-            <!-- Responsive Toggle Button -->
-            <button id="toggleButton" class="lg:hidden text-white focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
+                <!-- Responsive Toggle Button -->
+                <button id="toggleButton" class="lg:hidden text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
 
-            <!-- Navigation Links -->
-            <div class="hidden lg:flex space-x-4">
-                <a href="#" class="text-black">Home</a>
-                {%if not request.user.is_authenticated%}
-                <a href="{%url 'login' %}" class="text-black">Login</a>
-                {%else%}
-                {%if request.user.is_superuser%}
-                    <a href="{%url 'create_student'%}" class="text-gray-500">Create Student</a>
-                    <a href="{%url 'student_list'%}" class="text-gray-500">View Student</a>
-                    <a href="{%url 'create_mentor'%}" class="text-gray-500">Create Mentor</a>
-                    <a href="{%url 'create_course'%}" class="text-gray-500">Create Course</a>
-
-
+                <!-- Navigation Links -->
+                <div class="hidden lg:flex space-x-4">
+                    <a href="#" class="text-black">Home</a>
+                    {%if not request.user.is_authenticated%}
+                    <a href="{%url 'login' %}" class="text-black">Login</a>
+                    {%else%}
+                    
+                    <a href="{%url 'logout'%}" class="text-gray-500">logout</a>
                 {%endif%}
-                <a href="{%url 'logout'%}" class="text-gray-500">logout</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Navigation (Hidden by default) -->
+        <div id="mobileNav" class="lg:hidden fixed inset-0 bg-white  z-50 hidden">
+            <div class="flex justify-end p-4">
+                <button id="closeButton" class="text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button> 
+            </div>
+            <div class="flex flex-col items-center">
+                <a href="#" class="text-black py-2">Home</a>
+                
+                {%if not request.user.is_authenticated%}
+                    <a href="{%url 'login' %}" class="text-gray-500">Login</a>
+                {%else%}
+                    
+                    <a href="{%url 'logout'%}" class="text-gray-500">logout</a>
                 {%endif%}
             </div>
         </div>
-    </nav>
+        {%block content%}{%endblock content%}
 
-    <!-- Mobile Navigation (Hidden by default) -->
-    <div id="mobileNav" class="lg:hidden fixed inset-0 bg-blue-500 bg-opacity-75 z-50 hidden">
-        <div class="flex justify-end p-4">
-            <button id="closeButton" class="text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-        </div>
-        <div class="flex flex-col items-center">
-            <a href="#" class="text-black py-2">Home</a>
-            
-            {%if not request.user.is_authenticated%}
-                <a href="{%url 'login' %}" class="text-gray-500">Login</a>
-            {%else%}
-                {%if request.user.is_superuser%}
-                    <a href="{%url 'create_student'%}" class="text-gray-500">Create User</a>
-                    <a href="{%url 'create_mentor'%}" class="text-gray-500">Create Mentor</a>
-                    <a href="{%url 'create_course'%}" class="text-gray-500">Create Course</a>
-                {%endif%}
-                <a href="{%url 'logout'%}" class="text-gray-500">logout</a>
-            {%endif%}
-        </div>
-    </div>
-    {%block content%}{%endblock content%}
+        <!-- Content: Attendance Table with Date Filter, Take Attendance Button, Filter Button, and Pagination -->
+        
 
-    <!-- Content: Attendance Table with Date Filter, Take Attendance Button, Filter Button, and Pagination -->
-    
+        <script>
+            // JavaScript for toggling the mobile navigation
+            document.getElementById('toggleButton').addEventListener('click', function() {
+                document.getElementById('mobileNav').classList.toggle('hidden');
+            });
 
-    <script>
-        // JavaScript for toggling the mobile navigation
-        document.getElementById('toggleButton').addEventListener('click', function() {
-            document.getElementById('mobileNav').classList.toggle('hidden');
-        });
+            document.getElementById('closeButton').addEventListener('click', function() {
+                document.getElementById('mobileNav').classList.add('hidden');
+            });
 
-        document.getElementById('closeButton').addEventListener('click', function() {
-            document.getElementById('mobileNav').classList.add('hidden');
-        });
+            // JavaScript for toggling the attendance modal
+            document.getElementById('takeAttendanceButton').addEventListener('click', function() {
+                console.log("hey there")
+                document.getElementById('attendanceModal').classList.remove('hidden');
+            });
 
-        // JavaScript for toggling the attendance modal
-        document.getElementById('takeAttendanceButton').addEventListener('click', function() {
-            console.log("hey there")
-            document.getElementById('attendanceModal').classList.remove('hidden');
-        });
-
-        document.getElementById('modalCloseButton').addEventListener('click', function() {
-            document.getElementById('attendanceModal').classList.add('hidden');
-        });
-
-        // Close modal on Esc key press
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
+            document.getElementById('modalCloseButton').addEventListener('click', function() {
                 document.getElementById('attendanceModal').classList.add('hidden');
-            }
-        });
+            });
 
-        // JavaScript for closing the modal from inside the card
-        document.getElementById('modalInnerCloseButton').addEventListener('click', function() {
-            document.getElementById('attendanceModal').classList.add('hidden');
-        });
-        document.getElementById('x').addEventListener('click', function() {
-            console.log("clicked")
-            
-        });
-    </script>
+            // Close modal on Esc key press
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    document.getElementById('attendanceModal').classList.add('hidden');
+                }
+            });
 
-</body>
-</html>
+            // JavaScript for closing the modal from inside the card
+            document.getElementById('modalInnerCloseButton').addEventListener('click', function() {
+                document.getElementById('attendanceModal').classList.add('hidden');
+            });
+            document.getElementById('x').addEventListener('click', function() {
+                console.log("clicked")
+                
+            });
+        </script>
+
+    </body>
+    </html>
