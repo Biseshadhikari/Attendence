@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-b^i=%#wmvu)neb2h!$hh38*(3yw_qh_*_9j*qd8oufu1r_g_a1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -124,7 +124,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT ='/static/'
+STATIC_ROOT ='/var/www/Attendence/static/'
 
 
 # Default primary key field type
